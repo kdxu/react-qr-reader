@@ -156,7 +156,7 @@ module.exports = class Reader extends Component {
       : getDeviceId("environment").then(deviceId => Object.assign({}, { deviceId }, props.constraints))
 
     vConstraintsPromise
-      .then(video => navigator.mediaDevices.getUserMedia({ video }))
+      .then(video => navigator.mediaDevices.getUserMedia({ video: {...video, facingMode: { exact: "environment"}} }))
       .then(this.handleVideo)
       .catch(onError)
   }
