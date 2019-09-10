@@ -259,7 +259,7 @@ module.exports = class Reader extends Component {
 
       ctx.drawImage(legacyMode ? img : preview, hozOffset, vertOffset, width, height)
 
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const imageData = ctx.getImageData(150, 150, canvas.width - 150, canvas.height - 150)
       // Send data to web-worker
       this.worker.postMessage(imageData)
     } else {
