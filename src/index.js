@@ -255,9 +255,9 @@ module.exports = class Reader extends Component {
       const ctx = canvas.getContext('2d')
 
       ctx.drawImage(legacyMode ? img : preview, hozOffset, vertOffset, width, height)
-      const offSetX = Math.floor(canvas.width / 5) * 4
-      const offSetY = Math.floor(canvas.height / 5) * 4
-      const imageData = ctx.getImageData(offSetX, offSetY, canvas.width - offSetX, canvas.height - offSetY)
+      const offSetX = Math.floor(canvas.width / 5) * 2
+      const offSetY = Math.floor(canvas.height / 5) * 2
+      const imageData = ctx.getImageData(offSetX, offSetY, 200, 200)
       // Send data to web-worker
       this.worker.postMessage(imageData)
     } else {
