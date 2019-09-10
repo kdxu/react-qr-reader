@@ -346,7 +346,7 @@ module.exports = class Reader extends Component {
       left: 0,
       zIndex: 1,
       boxSizing: 'border-box',
-      border: '50px solid rgba(0, 0, 0, 0.3)',
+      border: '100px solid rgba(0, 0, 0, 0.3)',
       boxShadow: 'inset 0 0 0 5px rgba(255, 0, 0, 0.5)',
       position: 'absolute',
       width: '100%',
@@ -356,28 +356,8 @@ module.exports = class Reader extends Component {
     return (
       <section className={className} style={style}>
         <section style={containerStyle}>
-          {
-            (!legacyMode && showViewFinder)
-            ? <div style={viewFinderStyle} />
-            : null
-          }
-          {
-            legacyMode
-              ? <input
-                style={hiddenStyle}
-                type="file"
-                accept="image/*"
-                ref={this.setRefFactory('input')}
-                onChange={this.handleInputChange}
-              />
-              : null
-          }
-          {
-            legacyMode
-              ? <img style={imgPreviewStyle} ref={this.setRefFactory('img')} onLoad={onImageLoad} />
-              : <video style={videoPreviewStyle} ref={this.setRefFactory('preview')} />
-          }
-
+          <div style={viewFinderStyle} />
+          <video style={videoPreviewStyle} ref={this.setRefFactory('preview')} />
           <canvas style={hiddenStyle} ref={this.setRefFactory('canvas')} />
         </section>
       </section>
