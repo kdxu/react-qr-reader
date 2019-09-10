@@ -259,7 +259,7 @@ module.exports = class Reader extends Component {
 
       ctx.drawImage(legacyMode ? img : preview, hozOffset, vertOffset, width, height)
 
-      const imageData = ctx.getImageData(150, 150, canvas.width - 150, canvas.height - 150)
+      const imageData = ctx.getImageData(200, 200, canvas.width - 200, canvas.height - 200)
       // Send data to web-worker
       this.worker.postMessage(imageData)
     } else {
@@ -346,7 +346,7 @@ module.exports = class Reader extends Component {
       left: 0,
       zIndex: 1,
       boxSizing: 'border-box',
-      border: '150px solid rgba(0, 0, 0, 0.3)',
+      border: '200px solid rgba(0, 0, 0, 0.3)',
       boxShadow: 'inset 0 0 0 5px rgba(255, 0, 0, 0.5)',
       position: 'absolute',
       width: '100%',
