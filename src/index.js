@@ -15,7 +15,7 @@ let workerBlob = createBlob([__inline('../lib/worker.js')], {
 })
 
 // Props that are allowed to change dynamicly
-const propsKeys = ['delay', 'legacyMode', 'facingMode']
+const propsKeys = ['delay', 'legacyMode']
 
 module.exports = class Reader extends Component {
   static propTypes = {
@@ -24,7 +24,6 @@ module.exports = class Reader extends Component {
     onLoad: PropTypes.func,
     onImageLoad: PropTypes.func,
     delay: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    facingMode: PropTypes.oneOf(['user', 'environment']),
     legacyMode: PropTypes.bool,
     resolution: PropTypes.number,
     showViewFinder: PropTypes.bool,
@@ -35,7 +34,6 @@ module.exports = class Reader extends Component {
   static defaultProps = {
     delay: 500,
     resolution: 600,
-    facingMode: 'environment',
     showViewFinder: true,
     constraints: null
   };
@@ -135,7 +133,7 @@ module.exports = class Reader extends Component {
     }
   }
   initiate(props = this.props) {
-    const { onError, facingMode } = props
+    const { onError } = props
 
     // Check browser facingMode constraint support
     // Firefox ignores facingMode or deviceId constraints
@@ -147,7 +145,7 @@ module.exports = class Reader extends Component {
     const constraints = {}
 
     if(supported.facingMode) {
-      constraints.facingMode = { ideal: facingMode }
+      constraints.facingMode = { ideal: "environment" }
     }
     if(supported.frameRate) {
       constraints.frameRate = { ideal: 25, min: 10 }
@@ -155,7 +153,7 @@ module.exports = class Reader extends Component {
 
     const vConstraintsPromise = (supported.facingMode || isFirefox)
       ? Promise.resolve(props.constraints || constraints)
-      : getDeviceId(facingMode).then(deviceId => Object.assign({}, { deviceId }, props.constraints))
+      : getDeviceId("environment").then(deviceId => Object.assign({}, { deviceId }, props.constraints))
 
     vConstraintsPromise
       .then(video => navigator.mediaDevices.getUserMedia({ video }))
@@ -164,7 +162,6 @@ module.exports = class Reader extends Component {
   }
   handleVideo(stream) {
     const { preview } = this.els
-    const { facingMode } = this.props
 
     // Preview element hasn't been rendered so wait for it.
     if (!preview) {
@@ -193,7 +190,7 @@ module.exports = class Reader extends Component {
 
     preview.addEventListener('loadstart', this.handleLoadStart)
 
-    this.setState({ mirrorVideo: facingMode == 'user', streamLabel: streamTrack.label })
+    this.setState({ mirrorVideo: false, streamLabel: streamTrack.label })
   }
   handleLoadStart() {
     const { delay, onLoad } = this.props
@@ -259,7 +256,7 @@ module.exports = class Reader extends Component {
 
       ctx.drawImage(legacyMode ? img : preview, hozOffset, vertOffset, width, height)
 
-      const imageData = ctx.getImageData(200, 200, canvas.width - 200, canvas.height - 200)
+      const imageData = ctx.getImageData(150, 150, canvas.width - 150, canvas.height - 150)
       // Send data to web-worker
       this.worker.postMessage(imageData)
     } else {
@@ -312,7 +309,6 @@ module.exports = class Reader extends Component {
       onImageLoad,
       legacyMode,
       showViewFinder,
-      facingMode
     } = this.props
 
     const containerStyle = {
